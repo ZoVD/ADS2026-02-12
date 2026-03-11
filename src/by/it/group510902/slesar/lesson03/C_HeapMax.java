@@ -71,24 +71,65 @@ public class C_HeapMax {
     private class MaxHeap {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         //тут запишите ваше решение.
+
+
+
         //Будет мало? Ну тогда можете его собрать как Generic и/или использовать в варианте B
         private List<Long> heap = new ArrayList<>();
 
         int siftDown(int i) { //просеивание вверх
 
+            while (2*i + 1 < heap.size()) {
+                int lchild = 2*i + 1;
+                int rchild = 2*i + 2;
+
+                int largest = lchild;
+                if (rchild < heap.size() && heap.get(rchild) > heap.get(lchild)) {
+                    largest = rchild;
+                }
+
+                if (heap.get(i) < heap.get(largest)) {
+                    Long temp = heap.get(i);
+                    heap.set(i, heap.get(largest));
+                    heap.set(largest, temp);
+                    i = largest;
+                } else {
+                    break;
+                }
+            }
             return i;
         }
 
         int siftUp(int i) { //просеивание вниз
+            while (i > 0){
+                int parent = (i - 1) / 2;
 
+                Long temp = heap.get(i);
+                if(heap.get(i) > heap.get(parent)) {
+                    heap.set(i, heap.get(parent));
+                    heap.set(parent, temp);
+                    i = parent;
+                }
+                else {
+                    break;
+                }
+            }
             return i;
         }
 
         void insert(Long value) { //вставка
+            heap.add(value);
+            siftUp(heap.size() - 1);
+
         }
 
-        Long extractMax() { //извлечение и удаление максимума
-            Long result = null;
+        Long extractMax() {
+            //извлечение и удаление максимума
+            if (heap.isEmpty()) return null;
+            Long result = heap.get(0);
+            heap.set(0, heap.get(heap.size()-1));
+            heap.remove(heap.size()-1);
+            siftDown(0);
 
             return result;
         }
